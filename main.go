@@ -2,15 +2,17 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
+
+	"bookstore/controllers"
+	"bookstore/models"
 )
 
 func main() {
 	server := gin.Default()
 
-	server.GET("/", func(context *gin.Context) {
-		context.JSONP(http.StatusOK, gin.H{"data": "hello golang"})
-	})
+	models.ConnectDatabase()
+
+	server.GET("/books", controllers.GetBooks)
 
 	server.Run("localhost:8080")
 }
