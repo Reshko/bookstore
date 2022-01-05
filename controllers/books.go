@@ -70,7 +70,7 @@ func PatchBookByID(ctx *gin.Context) {
 		return
 	}
 
-	models.DB.Model(&book).Updates(input)
+	models.DB.Model(&book).Updates(models.Book{Title: input.Title, Author: input.Author})
 
 	ctx.JSON(http.StatusOK, gin.H{"data": book})
 }
