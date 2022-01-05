@@ -54,3 +54,23 @@ func DeleteBookByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"data": true})
 
 }
+
+func PatchBookByID(ctx *gin.Context) {
+	var book models.Book
+
+	if err := models.DB.Where("id = ?", ctx.Param("id")).First(&book).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		return
+	}
+
+	// Validate input
+	var input models.UpdateBookInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	models.DB.Model(&book).Updates(input)
+
+	ctx.JSON(http.StatusOK, gin.H{"data": book})
+}
