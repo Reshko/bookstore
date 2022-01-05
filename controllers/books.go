@@ -12,3 +12,29 @@ func GetBooks(contex *gin.Context) {
 	models.DB.Find(&books)
 	contex.JSON(http.StatusOK, gin.H{"data": books})
 }
+
+func PostBook(contex *gin.Context) {
+	var input models.CreateBookInput
+
+	if err := contex.ShouldBindJSON(&input); err != nil {
+		contex.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	book := models.Book{Title: input.Title, Author: input.Author}
+	models.DB.Create(&book)
+
+	contex.JSON(http.StatusOK, gin.H{"data": book})
+}
+
+func GetBookByID(ctx *gin.Context) {
+	var book models.Book
+
+	if err := models.DB.Where("id = ?", ctx.Param("id")).First(&book).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"data": book})
+
+}

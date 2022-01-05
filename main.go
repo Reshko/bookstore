@@ -13,6 +13,7 @@ func main() {
 	models.ConnectDatabase()
 
 	server.GET("/books", controllers.GetBooks)
+	server.POST("/books", controllers.PostBook)
 
 	server.Run("localhost:8080")
 }
