@@ -1,10 +1,9 @@
 package main
 
 import (
+	"bookstore/cmd/cmd/controllers"
+	"bookstore/cmd/cmd/models"
 	"github.com/gin-gonic/gin"
-
-	"bookstore/controllers"
-	"bookstore/models"
 )
 
 func main() {

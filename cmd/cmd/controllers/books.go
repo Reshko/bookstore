@@ -1,10 +1,9 @@
 package controllers
 
 import (
-	"net/http"
-
-	"bookstore/models"
+	"bookstore/cmd/cmd/models"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func GetBooks(contex *gin.Context) {
