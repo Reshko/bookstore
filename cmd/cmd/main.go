@@ -2,6 +2,7 @@ package main
 
 import (
 	"bookstore/cmd/cmd/controllers"
+	_ "bookstore/cmd/cmd/docs"
 	"bookstore/cmd/cmd/models"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -21,7 +22,7 @@ import (
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host      localhost:8080
-// @BasePath  /books
+// @BasePath  /api/v1
 
 // @securityDefinitions.basic  BasicAuth
 

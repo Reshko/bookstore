@@ -12,7 +12,6 @@ import (
 // @Tags         books
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "Account ID"
 // @Success      200  {object}  model.Account
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      404  {object}  httputil.HTTPError
