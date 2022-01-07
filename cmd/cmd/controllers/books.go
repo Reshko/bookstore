@@ -7,12 +7,33 @@ import (
 	"net/http"
 )
 
+// GetBooks godoc
+// @Summary      Show books
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /books [get]
 func GetBooks(contex *gin.Context) {
 	var books []models.Book
 	models.DB.Find(&books)
 	contex.JSON(http.StatusOK, gin.H{"data": books})
 }
 
+// PostBook godoc
+// @Summary      Add a book
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Book id"
+// @Success      200  {object}  models.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /books/{id} [post]
 func PostBook(contex *gin.Context) {
 	var input models.CreateBookInput
 	var books []models.Book
@@ -35,11 +56,11 @@ func PostBook(contex *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id   path      int  true  "Book id"
-// @Success      200  {object}  model.Book
+// @Success      200  {object}  models.Book
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      404  {object}  httputil.HTTPError
 // @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+// @Router       /books/{id} [get]
 func GetBookByID(contex *gin.Context) {
 	var book models.Book
 
@@ -53,6 +74,17 @@ func GetBookByID(contex *gin.Context) {
 
 }
 
+// DeleteBookByID godoc
+// @Summary      Delete a book
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Book id"  Format(int64)
+// @Success      200  {object}  models.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /books/{id} [delete]
 func DeleteBookByID(ctx *gin.Context) {
 	var book models.Book
 
@@ -67,6 +99,17 @@ func DeleteBookByID(ctx *gin.Context) {
 
 }
 
+// PatchBookByID godoc
+// @Summary      Update a book
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Book id"  Format(int64)
+// @Success      200  {object}  models.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /books/{id} [patch]
 func PatchBookByID(ctx *gin.Context) {
 	var book models.Book
 

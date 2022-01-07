@@ -2,7 +2,7 @@ package main
 
 import (
 	"bookstore/cmd/cmd/controllers"
-	//_ "bookstore/cmd/cmd/docs"
+	_ "bookstore/cmd/cmd/docs"
 	"bookstore/cmd/cmd/models"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
