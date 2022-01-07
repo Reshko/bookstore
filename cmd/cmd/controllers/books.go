@@ -1,19 +1,12 @@
 package controllers
 
 import (
+	"bookstore/cmd/cmd/httputil"
 	"bookstore/cmd/cmd/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-// GetBooks godoc
-// @Summary      Show books
-// @Description  get string by ID
-// @Tags         books
-// @Accept       json
-// @Produce      json
-// @Success      200  {string}  Helloworld
-// @Router       /books/{id} [get]
 func GetBooks(contex *gin.Context) {
 	var books []models.Book
 	models.DB.Find(&books)
@@ -36,15 +29,27 @@ func PostBook(contex *gin.Context) {
 	contex.JSON(http.StatusOK, gin.H{"data": books})
 }
 
-func GetBookByID(ctx *gin.Context) {
+// GetBookByID godoc
+// @Summary      Show a book
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Book id"
+// @Success      200  {object}  model.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /accounts/{id} [get]
+func GetBookByID(contex *gin.Context) {
 	var book models.Book
 
-	if err := models.DB.Where("id = ?", ctx.Param("id")).First(&book).Error; err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+	if err := models.DB.Where("id = ?", contex.Param("id")).First(&book).Error; err != nil {
+		//ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		httputil.NewError(contex, http.StatusNotFound, err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"data": book})
+	contex.JSON(http.StatusOK, gin.H{"data": book})
 
 }
 
