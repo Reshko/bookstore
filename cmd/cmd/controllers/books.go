@@ -74,6 +74,37 @@ func GetBookByID(contex *gin.Context) {
 
 }
 
+// UpdateBookByID godoc
+// @Summary      Update a book
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Book id"  Format(int64)
+// @Success      200  {object}  models.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /books/{id} [patch]
+func UpdateBookByID(ctx *gin.Context) {
+	var book models.Book
+
+	if err := models.DB.Where("id = ?", ctx.Param("id")).First(&book).Error; err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		return
+	}
+
+	// Validate input
+	var input models.UpdateBookInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	models.DB.Model(&book).Updates(models.Book{Title: input.Title, Author: input.Author})
+
+	ctx.JSON(http.StatusOK, gin.H{"data": book})
+}
+
 // DeleteBookByID godoc
 // @Summary      Delete a book
 // @Tags         books
@@ -97,35 +128,4 @@ func DeleteBookByID(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"data": true})
 
-}
-
-// PatchBookByID godoc
-// @Summary      Update a book
-// @Tags         books
-// @Accept       json
-// @Produce      json
-// @Param        id   path      int  true  "Book id"  Format(int64)
-// @Success      200  {object}  models.Book
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /books/{id} [patch]
-func PatchBookByID(ctx *gin.Context) {
-	var book models.Book
-
-	if err := models.DB.Where("id = ?", ctx.Param("id")).First(&book).Error; err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
-		return
-	}
-
-	// Validate input
-	var input models.UpdateBookInput
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	models.DB.Model(&book).Updates(models.Book{Title: input.Title, Author: input.Author})
-
-	ctx.JSON(http.StatusOK, gin.H{"data": book})
 }

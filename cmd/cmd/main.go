@@ -40,7 +40,7 @@ func main() {
 			books.GET(":id", controllers.GetBookByID)
 			books.POST("", controllers.PostBook)
 			books.DELETE(":id", controllers.DeleteBookByID)
-			books.PATCH(":id", controllers.PatchBookByID)
+			books.PATCH(":id", controllers.UpdateBookByID)
 		}
 	}
 
