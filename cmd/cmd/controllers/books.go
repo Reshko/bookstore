@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bookstore/cmd/cmd/httputil"
 	"bookstore/cmd/cmd/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -8,21 +9,31 @@ import (
 
 // GetBooks godoc
 // @Summary      Show books
-// @Description  get string by ID
 // @Tags         books
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  model.Account
+// @Success      200  {object}  models.Book
 // @Failure      400  {object}  httputil.HTTPError
 // @Failure      404  {object}  httputil.HTTPError
 // @Failure      500  {object}  httputil.HTTPError
-// @Router       /books/{id} [get]
+// @Router       /books [get]
 func GetBooks(contex *gin.Context) {
 	var books []models.Book
 	models.DB.Find(&books)
 	contex.JSON(http.StatusOK, gin.H{"data": books})
 }
 
+// PostBook godoc
+// @Summary      Add a book
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Book id"
+// @Success      200  {object}  models.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /books/{id} [post]
 func PostBook(contex *gin.Context) {
 	var input models.CreateBookInput
 	var books []models.Book
@@ -39,18 +50,41 @@ func PostBook(contex *gin.Context) {
 	contex.JSON(http.StatusOK, gin.H{"data": books})
 }
 
-func GetBookByID(ctx *gin.Context) {
+// GetBookByID godoc
+// @Summary      Show a book
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Book id"
+// @Success      200  {object}  models.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /books/{id} [get]
+func GetBookByID(contex *gin.Context) {
 	var book models.Book
 
-	if err := models.DB.Where("id = ?", ctx.Param("id")).First(&book).Error; err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+	if err := models.DB.Where("id = ?", contex.Param("id")).First(&book).Error; err != nil {
+		//ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		httputil.NewError(contex, http.StatusNotFound, err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"data": book})
+	contex.JSON(http.StatusOK, gin.H{"data": book})
 
 }
 
+// DeleteBookByID godoc
+// @Summary      Delete a book
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Book id"  Format(int64)
+// @Success      200  {object}  models.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /books/{id} [delete]
 func DeleteBookByID(ctx *gin.Context) {
 	var book models.Book
 
@@ -65,6 +99,17 @@ func DeleteBookByID(ctx *gin.Context) {
 
 }
 
+// PatchBookByID godoc
+// @Summary      Update a book
+// @Tags         books
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Book id"  Format(int64)
+// @Success      200  {object}  models.Book
+// @Failure      400  {object}  httputil.HTTPError
+// @Failure      404  {object}  httputil.HTTPError
+// @Failure      500  {object}  httputil.HTTPError
+// @Router       /books/{id} [patch]
 func PatchBookByID(ctx *gin.Context) {
 	var book models.Book
 
