@@ -12,10 +12,7 @@ import (
 // @Tags         books
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
+// @Success      200  {string}  Helloworld
 // @Router       /books/{id} [get]
 func GetBooks(contex *gin.Context) {
 	var books []models.Book
